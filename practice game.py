@@ -7,6 +7,7 @@ DB_CONFIG = {
     "database": "airport_adventure",
 }
 
+
 FUEL_COST_PER_COUNTRY = 10
 GOLD_COST_PER_COUNTRY = 15
 
