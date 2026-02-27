@@ -30,6 +30,59 @@ def reset_game(cur,conn):
 def full_quit_reset(cur, conn):
     reset_game(cur, conn)
 
+def has_saved_game(cur):
+    cur.execute("""
+        SELECT gold, fuel, score, `level`
+        FROM game_state
+        WHERE id = 1
+    """)
+    gold, fuel, score, level = cur.fetchone()
+
+    if gold == 200 and fuel == 120 and score == 0 and level == 1:
+        return False
+    return True
+
+def start_menu(cur,conn):
+    saved= has_saved_game(cur)
+    print("\n=== START MENU ===")
+
+    if saved:
+        print("1) Continue")
+        print("2) New game")
+        print("3) Exit")
+
+        while True:
+            choice = input("Choose an option: ").strip()
+            if choice == "1" and saved:
+                print("\n✅ Continuing saved game...")
+                return True
+            elif choice == "2":
+                reset_game(cur,conn)
+                print("\n🔄 New game started!")
+                return True
+            elif choice == "3":
+                print("\n👋 Goodbye!")
+                return False
+            else:
+                print("Invalid option. Please choose again.")
+    else:
+        print("1) New Game")
+        print("2) Exit")
+
+        while True:
+            choice = input("Choose an option: ").strip()
+
+            if choice == "1":
+                reset_game(cur, conn)
+                print("\n🔄 New game started!")
+                return True
+
+            elif choice == "2":
+                print("\n👋 Goodbye!")
+                return False
+
+            else:
+                print("Invalid option. Please choose again.")
 
 def show_state(cur):
     cur.execute("""
@@ -128,24 +181,31 @@ def main():
     cur = conn.cursor()
 
     try:
+
+        should_play = start_menu(cur, conn)
+        if not should_play:
+            return
+
+
         while True:
             show_state(cur)
             destinations = list_destinations(cur)
 
             choice = input("\nChoose a number (or 'q' to quit): ").strip().lower()
+
             if choice == "q":
                 quit_choice = input(
                     "\nQuit options:\n"
                     "1) Quit and SAVE (continue later)\n"
-                    "2) Quit and RESET\n"
+                    "2) Quit and RESET (start new game next time)\n"
                     "Choose 1 or 2: "
                 ).strip()
 
                 if quit_choice == "2":
-                    reset_game(cur, conn)
-                    print("\nData deleted, see you next time.")
+                        reset_game(cur, conn)
+                        print("\n✅ Game reset to initial values. Goodbye!")
                 else:
-                    print("\nGame saved. See you later!")
+                    print("\n✅ Game saved. Goodbye!")
                 break
 
             if not choice.isdigit():
