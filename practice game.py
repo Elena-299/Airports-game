@@ -15,6 +15,74 @@ GOLD_COST_PER_COUNTRY = 15
 def get_conn():
     return mysql.connector.connect(**DB_CONFIG)
 
+def reset_game(cur,conn):
+    cur.execute("""
+    UPDATE game_state
+    SET current_airport_id = 1,
+        gold = 200,
+        fuel = 120,
+        score = 0,
+        level = 1
+    WHERE id = 1 
+    """)
+    conn.commit()
+
+def full_quit_reset(cur, conn):
+    reset_game(cur, conn)
+
+def has_saved_game(cur):
+    cur.execute("""
+        SELECT gold, fuel, score, `level`
+        FROM game_state
+        WHERE id = 1
+    """)
+    gold, fuel, score, level = cur.fetchone()
+
+    if gold == 200 and fuel == 120 and score == 0 and level == 1:
+        return False
+    return True
+
+def start_menu(cur,conn):
+    saved= has_saved_game(cur)
+    print("\n=== START MENU ===")
+
+    if saved:
+        print("1) Continue")
+        print("2) New game")
+        print("3) Exit")
+
+        while True:
+            choice = input("Choose an option: ").strip()
+            if choice == "1" and saved:
+                print("\n✅ Continuing saved game...")
+                return True
+            elif choice == "2":
+                reset_game(cur,conn)
+                print("\n🔄 New game started!")
+                return True
+            elif choice == "3":
+                print("\n👋 Goodbye!")
+                return False
+            else:
+                print("Invalid option. Please choose again.")
+    else:
+        print("1) New Game")
+        print("2) Exit")
+
+        while True:
+            choice = input("Choose an option: ").strip()
+
+            if choice == "1":
+                reset_game(cur, conn)
+                print("\n🔄 New game started!")
+                return True
+
+            elif choice == "2":
+                print("\n👋 Goodbye!")
+                return False
+
+            else:
+                print("Invalid option. Please choose again.")
 
 def show_state(cur):
     cur.execute("""
@@ -97,20 +165,47 @@ def travel(cur, conn, chosen_airport_id):
 
     conn.commit()
 
-    print(f"\n✅ You have moved through {moved} countries to get to {iata} - {name}.")
+    # check fuel after travel
+    cur.execute("SELECT fuel FROM game_state WHERE id = 1")
+    fuel_left = cur.fetchone()[0]
 
+    if fuel_left <=0:
+        print("\n💀 GAME OVER 💀")
+        print("Fuel is 0. You have run out of fuel.")
+        return False #just so the main() knows that need to stop
+    print(f"\n✅ You have moved through {moved} countries to get to {iata} - {name}.")
+    return True #here the main() will know that need to continue the game
 
 def main():
     conn = get_conn()
     cur = conn.cursor()
 
     try:
+
+        should_play = start_menu(cur, conn)
+        if not should_play:
+            return
+
+
         while True:
             show_state(cur)
             destinations = list_destinations(cur)
 
             choice = input("\nChoose a number (or 'q' to quit): ").strip().lower()
+
             if choice == "q":
+                quit_choice = input(
+                    "\nQuit options:\n"
+                    "1) Quit and SAVE (continue later)\n"
+                    "2) Quit and RESET (start new game next time)\n"
+                    "Choose 1 or 2: "
+                ).strip()
+
+                if quit_choice == "2":
+                        reset_game(cur, conn)
+                        print("\n✅ Game reset to initial values. Goodbye!")
+                else:
+                    print("\n✅ Game saved. Goodbye!")
                 break
 
             if not choice.isdigit():
@@ -123,12 +218,25 @@ def main():
                 continue
 
             chosen_airport_id = destinations[idx - 1][0]
-            travel(cur, conn, chosen_airport_id)
+            keep_playing = travel(cur,conn,chosen_airport_id)
+            if not keep_playing:
+                choice2 = input("\nPress 'r' to restart or 'q' to quit: ").strip().lower()
+                if choice2 == 'r':
+                    cur.execute("""
+                    UPDATE game_state
+                    SET current_airport_id = 1, gold = 200, fuel = 120, score = 0,level = 1
+                        WHERE id = 1
+                    """)
+                    conn.commit()
+                    print("\nGame restarted!🔄")
+                    continue
+                else:
+                    break
 
     finally:
         cur.close()
         conn.close()
-        print("\nBye!")
+        print("\nGame closed.")
 
 
 if __name__ == "__main__":
