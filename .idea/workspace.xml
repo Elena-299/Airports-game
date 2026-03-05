@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="4">
-      <change beforePath="$PROJECT_DIR$/.idea/gameproject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gameproject.iml" afterDir="false" />
+    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="5">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/practice game.py" beforeDir="false" afterPath="$PROJECT_DIR$/practice game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/real game code.py" beforeDir="false" afterPath="$PROJECT_DIR$/real game code.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PUSH_AUTO_UPDATE" value="true" />
@@ -39,6 +46,7 @@
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;Python.practice game.executor&quot;: &quot;Run&quot;,
+    &quot;Python.real game code.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
@@ -64,7 +72,12 @@
       <option name="presentableId" value="Default" />
       <updated>1772091104582</updated>
       <workItem from="1772091105656" duration="6382000" />
-      <workItem from="1772186037260" duration="750000" />
+      <workItem from="1772186037260" duration="1173000" />
+      <workItem from="1772276968488" duration="878000" />
+      <workItem from="1772521695623" duration="8011000" />
+      <workItem from="1772622201138" duration="7000" />
+      <workItem from="1772640676550" duration="1743000" />
+      <workItem from="1772693584756" duration="8766000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -98,7 +111,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772097424339</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="5">
+      <option name="closed" value="true" />
+      <created>1772187087673</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772187087673</updated>
+    </task>
+    <task id="LOCAL-00006" summary="5">
+      <option name="closed" value="true" />
+      <created>1772539249934</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772539249934</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,20 +138,22 @@
     <MESSAGE value="2" />
     <MESSAGE value="3" />
     <MESSAGE value="4" />
-    <option name="LAST_COMMIT_MESSAGE" value="4" />
+    <MESSAGE value="5" />
+    <option name="LAST_COMMIT_MESSAGE" value="5" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/practice game.py</url>
-          <line>147</line>
+          <line>169</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/gameproject$practice_game.coverage" NAME="practice game Coverage Results" MODIFIED="1772186784023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/gameproject$practice_game.coverage" NAME="practice game Coverage Results" MODIFIED="1772523488468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/gameproject$real_game_code.coverage" NAME="real game code Coverage Results" MODIFIED="1772702597079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

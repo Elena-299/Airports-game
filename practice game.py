@@ -1,3 +1,7 @@
+
+
+
+
 import mysql.connector
 
 DB_CONFIG = {
