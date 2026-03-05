@@ -39,7 +39,6 @@ def dice_roll():
 MAX_FUEL = 120
 START_GOLD = 0
 START_FUEL = MAX_FUEL
-
 FUEL_QUARTER = MAX_FUEL // 4  # 30
 MAX_PURCHASES_PER_COUNTRY = 4
 
@@ -63,6 +62,9 @@ FUEL_COST_MATRIX = {
     ("EU", "EU"): 30
 }
 
+LEVEL2_SCORE = 80
+LEVEL3_SCORE= 160
+WIN_SCORE = 220
 
 
 def get_conn():
@@ -109,9 +111,9 @@ def start_menu(cur, conn):
                 start_icao = new_start_airport()
 
                 cur.execute("""
-                    INSERT INTO game (screen_name, location_icao, gold, fuel, score, status, unlocked_continents)
-                    VALUES (%s, %s, %s, %s, 0, 'active', 'EU')
-                """, (screen_name, start_icao, START_GOLD, START_FUEL))
+                    INSERT INTO game (screen_name, location_icao, start_icao, gold, fuel, base_points, status, unlocked_continents)
+                    VALUES (%s, %s, %s, %s,%s, 0, 'active', 'EU')
+                """, (screen_name, start_icao, start_icao, START_GOLD, START_FUEL))
 
                 conn.commit()
 
@@ -138,7 +140,7 @@ def start_menu(cur, conn):
                 start_icao = new_start_airport()
 
                 cur.execute("""
-                    INSERT INTO game (screen_name, location_icao, gold, fuel, score, status, unlocked_continents)
+                    INSERT INTO game (screen_name, location_icao, gold, fuel, base_points, status, unlocked_continents)
                     VALUES (%s, %s, %s, %s, 0, 'active', 'EU')
                 """, (screen_name, start_icao, START_GOLD, START_FUEL))
 
@@ -165,13 +167,16 @@ def delete_saved_game(cur, conn):
     conn.commit()
 
 def reset_game(cur, conn, screen_name: str):
-    start_icao = new_start_airport()
+    cur.execute("SELECT start_icao FROM game WHERE screen_name=%s", (screen_name,))
+    row = cur.fetchone()
+    start_icao = row[0] if row and row[0] else new_start_airport()
+
     cur.execute("""
         UPDATE game
         SET location_icao = %s,
             gold = %s,
             fuel = %s,
-            score = 0,
+            base_points = 0,
             status = 'active',
             fuel_purchases_in_country = 0,
             unlocked_continents = 'EU',
@@ -182,7 +187,7 @@ def reset_game(cur, conn, screen_name: str):
 
 def has_saved_game(cur, screen_name: str) -> bool:
     cur.execute("""
-        SELECT location_icao, gold, fuel, score, status
+        SELECT location_icao, gold, fuel, base_points, status
         FROM game
         WHERE screen_name = %s
     """, (screen_name,))
@@ -190,8 +195,8 @@ def has_saved_game(cur, screen_name: str) -> bool:
     if row is None:
         return False
 
-    location_icao, gold, fuel, score, status = row
-    if (gold == START_GOLD and fuel == START_FUEL and score == 0 and status == "active"):
+    location_icao, gold, fuel, base_points, status = row
+    if (gold == START_GOLD and fuel == START_FUEL and base_points == 0 and status == "active"):
         return False
     return True
 
@@ -205,40 +210,51 @@ def format_unlocked(s: set[str]):
 
 def get_player_progress(cur, screen_name: str):
     cur.execute("""
-        SELECT location_icao, fuel, gold, score, unlocked_continents
+        SELECT location_icao, fuel, gold, base_points, unlocked_continents
         FROM game
         WHERE screen_name = %s
     """, (screen_name,))
     row = cur.fetchone()
     if not row:
         return None
-    location_icao, fuel, gold, score, unlocked_str = row
+    location_icao, fuel, gold, base_points, unlocked_str = row
     return {
         "location_icao": location_icao,
         "fuel": fuel,
         "gold": gold,
-        "score": score,
+        "base_points": base_points,
         "unlocked": parse_unlocked(unlocked_str)
     }
 
-def unlock_continent(cur, conn, screen_name: str, continent: str):
-    progress = get_player_progress(cur, screen_name)
-    if not progress:
+def check_level_unlocks(cur, conn, screen_name: str):
+    cur.execute("SELECT base_points, unlocked_continents FROM game WHERE screen_name=%s", (screen_name,))
+    row = cur.fetchone()
+    if not row:
         return
-    unlocked = progress["unlocked"]
-    if continent not in unlocked:
-        unlocked.add(continent)
+
+    score, unlocked_str = row
+    unlocked = parse_unlocked(unlocked_str)
+
+    changed = False
+    if score >= LEVEL2_SCORE and "NA" not in unlocked:
+        unlocked.add("NA")
+        changed = True
+        print(" Nivel 2 desbloqueado: North America (NA)")
+
+    if score >= LEVEL3_SCORE and "AS" not in unlocked:
+        unlocked.add("AS")
+        changed = True
+        print(" Nivel 3 desbloqueado: Asia (AS)")
+
+    if changed:
         cur.execute("""
-            UPDATE game
-            SET unlocked_continents = %s
-            WHERE screen_name = %s
+            UPDATE game SET unlocked_continents=%s WHERE screen_name=%s
         """, (format_unlocked(unlocked), screen_name))
         conn.commit()
-        print(f"🔓 Nuevo continente desbloqueado: {continent}")
 
 def show_state(cur, screen_name: str):
     cur.execute("""
-        SELECT g.gold, g.fuel, g.score, g.status, g.fuel_purchases_in_country,
+        SELECT g.gold, g.fuel, g.base_points, g.status, g.fuel_purchases_in_country,
                a.icao_code, a.name,
                c.country_code, c.name, c.continent,
                c.base_points, c.fuel_price, c.gold_reward
@@ -275,7 +291,7 @@ def list_airports_for_player(cur, screen_name: str):
 
     cur.execute(f"""
         SELECT a.icao_code, a.name,
-               c.name, c.continent
+               c.country_code, c.name, c.continent
         FROM airport a
         JOIN country c ON c.country_code = a.country_code
         WHERE c.continent IN ({placeholders})
@@ -292,28 +308,38 @@ def calculate_fuel_cost(from_country, from_continent, to_country, to_continent):
 def buy_fuel(cur, conn, screen_name: str):
     cur.execute("""
         SELECT g.gold, g.fuel, g.fuel_purchases_in_country,
-               c.fuel_price, c.country_code, c.name
+               c.fuel_price, c.name
         FROM game g
         JOIN airport a ON a.icao_code = g.location_icao
         JOIN country c ON c.country_code = a.country_code
         WHERE g.screen_name = %s
     """, (screen_name,))
-    gold, fuel, purchases, fuel_price, country_code, country_name = cur.fetchone()
+    row = cur.fetchone()
 
+    if not row:
+        print("No game found for this player.")
+        return
+
+    gold, fuel, purchases, fuel_price, country_name = row
+
+    # Regla: máximo 4 compras por país
     if purchases >= MAX_PURCHASES_PER_COUNTRY:
-        print(f" You already bought fuel {purchases} times in {country_name}. Max is {MAX_PURCHASES_PER_COUNTRY}.")
+        print(f"You already bought fuel {purchases} times in {country_name}. Max is {MAX_PURCHASES_PER_COUNTRY}.")
         return
 
+    # Si ya está lleno
     if fuel >= MAX_FUEL:
-        print(" Your tank is already full.")
+        print("Your tank is already full.")
         return
 
+    # Regla: siempre intenta comprar 1/4 (30), pero si falta menos, compra solo lo que falta
     amount_to_buy = min(FUEL_QUARTER, MAX_FUEL - fuel)
 
-    cost = fuel_price
+    # Precio por unidad * cantidad
+    cost = fuel_price * amount_to_buy
 
     if gold < cost:
-        print(f" Not enough gold. Need {cost}, you have {gold}.")
+        print(f"Not enough gold. Need {cost}, you have {gold}.")
         return
 
     cur.execute("""
@@ -325,7 +351,7 @@ def buy_fuel(cur, conn, screen_name: str):
     """, (cost, amount_to_buy, screen_name))
     conn.commit()
 
-    print(f"Bought {amount_to_buy} fuel in {country_name} for {cost} gold.")
+    print(f"Bought {amount_to_buy} fuel (1/4 tank) in {country_name} for {cost} gold.")
     print(f"Purchases in this country: {purchases + 1}/{MAX_PURCHASES_PER_COUNTRY}")
 
 
@@ -393,7 +419,7 @@ def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
             SET location_icao = %s,
                 fuel = fuel - %s,
                 gold = gold + %s,
-                score = score + %s,
+                base_points = base_points + %s,
                 fuel_purchases_in_country = 0
             WHERE screen_name = %s
         """, (to_icao, fuel_cost, gold_gain, base_points, screen_name))
@@ -403,14 +429,14 @@ def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
             SET location_icao = %s,
                 fuel = fuel - %s,
                 gold = gold + %s,
-                score = score + %s
+                base_points = base_points + %s
             WHERE screen_name = %s
         """, (to_icao, fuel_cost, gold_gain, base_points, screen_name))
 
     conn.commit()
 
 
-    unlock_continent(cur, conn, screen_name, to_continent)
+    check_level_unlocks(cur, conn, screen_name)
 
     print(f"\nTraveled to {to_icao} - {dest_airport_name} ({to_country_name}, {to_continent})")
     print(f"Fuel cost: {fuel_cost} | Points gained: {base_points} | Gold gained: {gold_gain}")
@@ -422,9 +448,46 @@ def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
         conn.commit()
         print("\n GAME OVER  You ran out of fuel.")
         return False
+    if check_win(cur, screen_name):
+        return False
 
     return True
 
+def get_current_country_and_continent(cur, screen_name: str):
+    cur.execute("""
+        SELECT c.country_code, c.continent
+        FROM game g
+        JOIN airport a ON a.icao_code = g.location_icao
+        JOIN country c ON c.country_code = a.country_code
+        WHERE g.screen_name=%s
+    """, (screen_name,))
+    row = cur.fetchone()
+    if not row:
+        return None, None
+    return row
+
+
+def check_win(cur, screen_name: str) -> bool:
+    cur.execute("""
+        SELECT location_icao, start_icao, base_points, gold, fuel, unlocked_continents
+        FROM game
+        WHERE screen_name=%s
+    """, (screen_name,))
+    row = cur.fetchone()
+    if not row:
+        return False
+
+    location_icao, start_icao, score, gold, fuel, unlocked_str = row
+    unlocked = parse_unlocked(unlocked_str)
+
+    all_levels = {"EU", "NA", "AS"}.issubset(unlocked)
+
+    if all_levels and score >= WIN_SCORE and location_icao == start_icao:
+        print("\ YOU WIN!")
+        print(f"Score: {score} | Gold: {gold} | Fuel: {fuel}")
+        return True
+
+    return False
 
 def main():
     conn = get_conn()
@@ -432,12 +495,14 @@ def main():
 
     try:
         action, screen_name = start_menu(cur, conn)
-
         if action == "exit":
             return
 
         while True:
             show_state(cur, screen_name)
+
+            if check_win(cur, screen_name):
+                break
 
             print("\nActions:")
             print("1) Travel")
@@ -447,7 +512,6 @@ def main():
             action = input("Choose: ").strip().lower()
 
             if action == "q":
-                ...
                 break
 
             elif action == "1":
@@ -456,9 +520,12 @@ def main():
                     print("No airports available.")
                     continue
 
+                from_country, from_continent = get_current_country_and_continent(cur, screen_name)
+
                 print("\n=== AIRPORTS (Unlocked Continents) ===")
-                for idx, (icao, name, cname, cont) in enumerate(airports, start=1):
-                    print(f"{idx}) {icao} - {name} ({cname}, {cont})")
+                for idx, (icao, name, to_country_code, to_country_name, to_continent) in enumerate(airports, start=1):
+                    fuel_cost = calculate_fuel_cost(from_country, from_continent, to_country_code, to_continent)
+                    print(f"{idx}) {icao} - {name} ({to_country_name}, {to_continent}) | Fuel cost: {fuel_cost}")
 
                 choice = input("\nChoose airport number (or 'c' to cancel): ").strip().lower()
                 if choice == "c":
@@ -476,15 +543,21 @@ def main():
                 keep_playing = travel(cur, conn, screen_name, to_icao)
 
                 if not keep_playing:
+                    if check_win(cur, screen_name):
+                        break
+
                     choice2 = input("\nPress 'r' to restart or 'q' to quit: ").strip().lower()
                     if choice2 == "r":
                         reset_game(cur, conn, screen_name)
-                        print("\n Game restarted!")
+                        print("\nGame restarted!")
                     else:
                         break
 
             elif action == "2":
                 buy_fuel(cur, conn, screen_name)
+
+                if check_win(cur, screen_name):
+                    break
 
             else:
                 print("Invalid action.")
