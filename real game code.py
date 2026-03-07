@@ -418,12 +418,25 @@ def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
     print(f"\nTraveled to {to_icao} - {dest_airport_name} ({to_country_name}, {to_continent})")
     print(f"Fuel cost: {fuel_cost} | Points gained: {base_points} | Gold gained: {gold_gain}")
 
-    cur.execute("SELECT fuel FROM game WHERE screen_name = %s", (screen_name,))
-    fuel_left = cur.fetchone()[0]
-    if fuel_left <= 0:
-        print("\n GAME OVER  You ran out of fuel.")
-        delete_saved_game(cur,conn)
-        return False
+    cur.execute("""
+                SELECT g.fuel, g.gold, c.fuel_price
+                FROM game g
+                         JOIN airport a ON a.icao_code = g.location_icao
+                         JOIN country c ON c.country_code = a.country_code
+                WHERE g.screen_name = %s
+                """, (screen_name,))
+    row = cur.fetchone()
+
+    if row:
+        fuel_left, gold_left, current_fuel_price = row
+
+        if fuel_left <= 0 and gold_left < current_fuel_price:
+            cur.execute("UPDATE game SET status = 'dead' WHERE screen_name = %s", (screen_name,))
+            conn.commit()
+            print("\nGAME OVER. You ran out of fuel and don't have enough gold to buy more.")
+            return False
+        elif fuel_left <= 0:
+            print("\nYou ran out of fuel, but you still have enough gold to buy more.")
 
     if check_win(cur, screen_name):
         return False
@@ -585,9 +598,6 @@ def main():
 
                 choice = input("\nChoose airport number (or 'c' to cancel): ").strip().lower()
                 if choice == "c":
-                    continue
-                if not choice.isdigit():
-                    print("Invalid input.")
                     continue
 
                 idx_choice = int(choice)
