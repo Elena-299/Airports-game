@@ -444,6 +444,59 @@ def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
     return True
 
 
+def show_manual(start_icao: str):
+    print("\n=== GAME MANUAL ===\n")
+    print(f"The portal that will bring you back to your universe is located at {start_icao}.")
+    print("The portal will only open after you have successfully unlocked all three levels and collected at least 220 points.\n")
+
+    print("Travel across the world and return to the starting point once you are ready to win the game and go home!\n")
+
+    print("LEVEL GUIDE\n")
+    print("Level 1:")
+    print("You can only travel in Europe\n")
+
+    print("Level 2:")
+    print("Unlock North America by collecting 80 points.")
+    print("You can only travel in Europe and North America.\n")
+
+    print("Level 3:")
+    print("Unlock Asia by collecting 160 points.")
+    print("You can now travel between Europe, North America and Asia.\n")
+
+    print("SCORING SYSTEM")
+    print("Every time you travel to a new airport, you earn points based on the continent you travel to.\n")
+
+    print("For traveling within the continent:")
+    print("Europe: 20 points")
+    print("Asia: 30 points")
+    print("North America: 40 points\n")
+
+    print("GOLD")
+    print("You are rewarded with gold only when you travel to a different country.\n")
+
+    print("FUEL")
+    print("Traveling will cost fuel and the game will end if you run out of fuel.")
+    print("Fuel cost depends on whether you travel within a country, within a continent, or between continents.\n")
+
+    print("Traveling within the same country:")
+    print("Europe: 10 fuel")
+    print("North America: 15 fuel")
+    print("Asia: 15 fuel\n")
+
+    print("Traveling between countries in the same continent costs more fuel.")
+    print("For traveling between countries in:")
+    print("Europe: 30 fuel")
+    print("North America: 60 fuel")
+    print("Asia: 60 fuel\n")
+
+    print("Traveling between continents costs the most fuel.")
+    print("Europe to North America: 90 fuel")
+    print("Europe to Asia: 90 fuel")
+    print("North America to Asia: 120 fuel\n")
+
+    print("You can purchase more fuel using gold, but fuel prices vary depending on the country you are purchasing from.")
+    print("You can purchase fuel a maximum of 4 times per country.\n")
+
 def start_menu(cur, conn):
     print("\nWELCOME TO GLITCH IN TRANSIT ")
     print("================================")
@@ -474,7 +527,6 @@ def start_menu(cur, conn):
 
                 print(f"\n Continuing saved game for: {saved_name}")
                 return ("continue", saved_name)
-
             elif choice == "2":
                 screen_name = input("Enter a screen name for the new game: ").strip()
                 if not screen_name:
@@ -490,10 +542,13 @@ def start_menu(cur, conn):
                     INSERT INTO game (screen_name, location_icao, start_icao, gold, fuel, base_points, status, unlocked_continents)
                     VALUES (%s, %s, %s, %s, %s, 0, 'active', 'EU')
                 """, (screen_name, start_icao, start_icao, START_GOLD, START_FUEL))
+
                 conn.commit()
 
-                print(f"\n Starting airport: {start_icao}")
-                print(" New game started!")
+                print(f"\nStarting airport: {start_icao}")
+                print("New game started!")
+                show_manual(start_icao)
+
                 return ("new", screen_name)
 
             elif choice == "3":
@@ -523,6 +578,8 @@ def start_menu(cur, conn):
 
                 print(f"\n Starting airport: {start_icao}")
                 print(" New game started!")
+                show_manual(start_icao)
+
                 return ("new", screen_name)
 
             elif choice == "2":
