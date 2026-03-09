@@ -72,21 +72,10 @@ WIN_SCORE = 220
 def get_conn():
     return mysql.connector.connect(**DB_CONFIG)
 
-
-def new_start_airport():
-    return dice_roll()
-
-
 def get_saved_screen_name(cur):
     cur.execute("SELECT screen_name FROM game WHERE status='active' LIMIT 1")
     row = cur.fetchone()
     return row[0] if row else None
-
-
-def delete_saved_game(cur, conn):
-    cur.execute("DELETE FROM game")
-    conn.commit()
-
 
 def get_game_status(cur, screen_name: str):
     cur.execute("SELECT status FROM game WHERE screen_name=%s", (screen_name,))
@@ -97,7 +86,7 @@ def get_game_status(cur, screen_name: str):
 def reset_game(cur, conn, screen_name: str):
     cur.execute("SELECT start_icao FROM game WHERE screen_name=%s", (screen_name,))
     row = cur.fetchone()
-    start_icao = row[0] if row and row[0] else new_start_airport()
+    start_icao = row[0] if row and row[0] else dice_roll()
 
     cur.execute("""
         UPDATE game
@@ -112,23 +101,6 @@ def reset_game(cur, conn, screen_name: str):
         WHERE screen_name = %s
     """, (start_icao, START_GOLD, MAX_FUEL, screen_name))
     conn.commit()
-
-
-def has_saved_game(cur, screen_name: str) -> bool:
-    cur.execute("""
-        SELECT location_icao, gold, fuel, base_points, status
-        FROM game
-        WHERE screen_name = %s
-    """, (screen_name,))
-    row = cur.fetchone()
-    if row is None:
-        return False
-
-    location_icao, gold, fuel, base_points, status = row
-    if (gold == START_GOLD and fuel == START_FUEL and base_points == 0 and status == "active"):
-        return False
-    return True
-
 
 def parse_unlocked(value: str):
     if not value:
@@ -158,7 +130,7 @@ def get_player_progress(cur, screen_name: str):
         "unlocked": parse_unlocked(unlocked_str)
     }
 
-
+#check if the player has enough points to unlock new level
 def check_level_unlocks(cur, conn, screen_name: str):
     cur.execute("SELECT base_points, unlocked_continents FROM game WHERE screen_name=%s", (screen_name,))
     row = cur.fetchone()
@@ -235,7 +207,7 @@ def list_airports_for_player(cur, screen_name: str):
 
     return cur.fetchall()
 
-
+#calculate how much fuel cost a trip
 def calculate_fuel_cost(from_country, from_continent, to_country, to_continent):
     if from_country == to_country:
         return SAME_COUNTRY_FUEL_COST[from_continent]
@@ -328,7 +300,7 @@ def check_win(cur, screen_name: str) -> bool:
 
     return False
 
-
+#process to travel from an airport to another
 def travel(cur, conn, screen_name: str, to_icao: str) -> bool:
     cur.execute("""
         SELECT g.location_icao, g.fuel, g.status
@@ -536,7 +508,7 @@ def start_menu(cur, conn):
                 cur.execute("DELETE FROM game")
                 conn.commit()
 
-                start_icao = new_start_airport()
+                start_icao = dice_roll()
 
                 cur.execute("""
                     INSERT INTO game (screen_name, location_icao, start_icao, gold, fuel, base_points, status, unlocked_continents)
@@ -568,7 +540,7 @@ def start_menu(cur, conn):
                 cur.execute("DELETE FROM game")
                 conn.commit()
 
-                start_icao = new_start_airport()
+                start_icao = dice_roll()
 
                 cur.execute("""
                     INSERT INTO game (screen_name, location_icao, start_icao, gold, fuel, base_points, status, unlocked_continents)
@@ -631,13 +603,6 @@ def main():
                     print("Could not read current country/continent.")
                     continue
 
-                cur.execute("SELECT fuel, gold FROM game WHERE screen_name=%s", (screen_name,))
-                row = cur.fetchone()
-                if not row:
-                    print("No game found.")
-                    break
-                player_fuel, player_gold = row
-
                 print("\n=== AIRPORTS ===")
                 for idx, (
                     icao, name,
@@ -655,6 +620,9 @@ def main():
 
                 choice = input("\nChoose airport number (or 'c' to cancel): ").strip().lower()
                 if choice == "c":
+                    continue
+                if not choice.isdigit():
+                    print("Invalid input.")
                     continue
 
                 idx_choice = int(choice)

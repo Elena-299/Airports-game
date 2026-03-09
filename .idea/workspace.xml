@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="9">
+    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="10">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/real game code.py" beforeDir="false" afterPath="$PROJECT_DIR$/real game code.py" afterDir="false" />
     </list>
@@ -80,7 +80,7 @@
       <workItem from="1772693584756" duration="12424000" />
       <workItem from="1772711792716" duration="4745000" />
       <workItem from="1772886969226" duration="2082000" />
-      <workItem from="1773050568329" duration="817000" />
+      <workItem from="1773050568329" duration="2904000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -162,7 +162,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772902650959</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="10">
+      <option name="closed" value="true" />
+      <created>1773051400726</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773051400726</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +186,8 @@
     <MESSAGE value="7" />
     <MESSAGE value="8" />
     <MESSAGE value="9" />
-    <option name="LAST_COMMIT_MESSAGE" value="9" />
+    <MESSAGE value="10" />
+    <option name="LAST_COMMIT_MESSAGE" value="10" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
