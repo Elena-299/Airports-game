@@ -1,4 +1,74 @@
-INSERT INTO airport (icao, name, country) VALUES
+CREATE DATABASE `glitch in transit`;
+USE `glitch in transit`;
+
+
+CREATE TABLE country (
+  country_code CHAR(2) PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  continent VARCHAR(50) NOT NULL,
+  base_points INT NOT NULL DEFAULT 0,
+  gold_reward INT NOT NULL DEFAULT 0,
+  fuel_price INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE airport (
+  icao_code CHAR(4) PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  country_code CHAR(2) NOT NULL,
+  FOREIGN KEY (country_code) REFERENCES country(country_code)
+);
+
+CREATE TABLE game (
+  screen_name VARCHAR(50) PRIMARY KEY,
+  location_icao CHAR(4) NOT NULL,
+  start_icao CHAR(4) NOT NULL,
+  gold INT NOT NULL DEFAULT 0,
+  fuel INT NOT NULL DEFAULT 0,
+  base_points INT NOT NULL DEFAULT 0,
+  status VARCHAR(20) NOT NULL,
+  started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fuel_purchases_in_country INT NOT NULL DEFAULT 0,
+  unlocked_continents VARCHAR(50) NOT NULL DEFAULT 'EU',
+
+  FOREIGN KEY (location_icao) REFERENCES airport(icao_code),
+  FOREIGN KEY (start_icao) REFERENCES airport(icao_code)
+);
+
+
+INSERT INTO country (country_code, name, continent, base_points, gold_reward, fuel_price) VALUES
+('CA', 'Canada', 'North America', 40, 55, 40),
+('US', 'United States', 'North America', 40, 86, 30),
+('MX', 'Mexico', 'North America', 40, 14, 54),
+('CU', 'Cuba', 'North America', 40, 19, 44),
+('JM', 'Jamaica', 'North America', 40, 8, 39),
+('CR', 'Costa Rica', 'North America', 40, 18, 50),
+('BS', 'Bahamas', 'North America', 40, 39, 53),
+('DO', 'Dominic Republic', 'North America', 40, 12, 39),
+('SV', 'El salvador', 'North America', 40, 6, 37),
+('FI', 'Finland', 'Europe', 20, 56, 76),
+('ES', 'Spain', 'Europe', 20, 39, 59),
+('FR', 'France', 'Europe', 20, 46, 66),
+('DE', 'Germany', 'Europe', 20, 56, 70),
+('GR', 'Greece', 'Europe', 20, 25, 62),
+('AT', 'Austria', 'Europe', 20, 57, 62),
+('GB', 'United kingdom', 'Europe', 20, 53, 65),
+('IT', 'Italy', 'Europe', 20, 40, 69),
+('SE', 'Sweden', 'Europe', 20, 57, 65),
+('UA', 'Ukraine', 'Europe', 20, 5, 51),
+('PL', 'Poland', 'Europe', 20, 25, 56),
+('RS', 'Serbia', 'Europe', 20, 14, 68),
+('VN', 'Vietnam', 'Asia', 30, 4, 75),
+('JP', 'Japan', 'Asia', 30, 33, 40),
+('CN', 'China', 'Asia', 30, 13, 38),
+('RU', 'Russia', 'Asia', 30, 15, 35),
+('IN', 'India', 'Asia', 30, 3, 42),
+('SA', 'Saudi Arabia', 'Asia', 30, 35, 25),
+('TR', 'Turkey', 'Asia', 30, 16, 47),
+('IR', 'Iran', 'Asia', 30, 5, 15),
+('KZ', 'Kazakhstan', 'Asia', 30, 14, 20),
+('ID', 'Indonesia', 'Asia', 30, 5, 24);
+
+INSERT INTO airport (icao_code, name, country_code) VALUES
 ('CYYZ','Lester B. Pearson International Airport','CA'),
 ('CYVR','Vancouver International Airport','CA'),
 ('CYWG','Winnipeg International Airport','CA'),
@@ -69,3 +139,6 @@ INSERT INTO airport (icao, name, country) VALUES
 ('UACC','Nursultan Nazarbayev International Airport','KZ'),
 ('WIII','Soekarno-Hatta International Airport','ID'),
 ('WADD','Ngurah Rai (Bali) International Airport','ID');
+
+
+
