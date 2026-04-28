@@ -1,0 +1,397 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top right, rgba(250, 204, 21, 0.12), transparent 30%),
+        linear-gradient(135deg, #020617, #111827 50%, #1e293b);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.screen {
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+/* WELCOME SCREEN */
+
+.welcome-screen {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at top, rgba(250, 204, 21, 0.18), transparent 35%),
+        linear-gradient(135deg, #020617, #111827 50%, #1e293b);
+}
+
+.welcome-card {
+    width: min(850px, 90%);
+    background: rgba(15, 23, 42, 0.88);
+    border: 2px solid rgba(250, 204, 21, 0.8);
+    border-radius: 24px;
+    padding: 42px;
+    text-align: center;
+    box-shadow: 0 0 35px rgba(250, 204, 21, 0.18);
+}
+
+.system-label {
+    color: #facc15;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+
+.welcome-card h1 {
+    font-size: 4rem;
+    margin: 0 0 20px 0;
+    color: #f8fafc;
+    text-shadow: 0 0 18px rgba(250, 204, 21, 0.35);
+}
+
+.welcome-story {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    max-width: 760px;
+    margin: 0 auto 18px auto;
+}
+
+.welcome-goal {
+    font-size: 1.1rem;
+    color: #facc15;
+    font-weight: bold;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+}
+
+.name-box {
+    margin: 25px auto;
+}
+
+.name-box label {
+    display: block;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.name-box input {
+    width: min(360px, 90%);
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    outline: none;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.name-box input:focus {
+    border-color: #facc15;
+}
+
+.welcome-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+/* GENERAL BUTTONS */
+
+button,
+.travel-btn,
+.action-buttons button,
+.top-bar button,
+.welcome-buttons button {
+    background: #facc15;
+    color: #111827;
+    border: none;
+    border-radius: 12px;
+    padding: 9px 14px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+button:hover,
+.travel-btn:hover,
+.action-buttons button:hover,
+.top-bar button:hover,
+.welcome-buttons button:hover {
+    background: #fde047;
+    transform: translateY(-2px);
+}
+
+.welcome-buttons button {
+    padding: 14px 24px;
+    font-size: 1rem;
+}
+
+.secondary-btn {
+    background: transparent !important;
+    color: #facc15 !important;
+    border: 2px solid #facc15 !important;
+}
+
+/* GAME SCREEN */
+
+#gameScreen {
+    height: 100vh;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top right, rgba(250, 204, 21, 0.12), transparent 30%),
+        linear-gradient(135deg, #020617, #111827 50%, #1e293b);
+}
+
+.top-bar {
+    height: 58px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #f8fafc;
+    text-shadow: 0 0 18px rgba(250, 204, 21, 0.25);
+}
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 16px;
+    height: calc(100vh - 90px);
+}
+
+.left-column,
+.right-column {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.right-column {
+    height: 100%;
+}
+
+/* PANELS */
+
+.panel {
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(250, 204, 21, 0.25);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+    padding: 12px;
+    border-radius: 14px;
+    margin: 0;
+}
+
+.panel h2 {
+    margin: 0 0 10px 0;
+    color: #f8fafc;
+    font-size: 1.1rem;
+}
+
+.rules-panel p,
+.message-panel p {
+    margin: 6px 0;
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+/* STATUS */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.stat-card {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 9px;
+    border-radius: 10px;
+}
+
+.stat-card span {
+    display: block;
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    margin-bottom: 4px;
+}
+
+.stat-card strong {
+    font-size: 1rem;
+    color: #f8fafc;
+}
+
+.stat-card.wide {
+    grid-column: span 2;
+}
+
+/* ACTIONS AND MESSAGE */
+
+.actions-panel {
+    flex: 0 0 auto;
+}
+
+.action-buttons button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+}
+
+.message-panel {
+    flex: 0 0 110px;
+    min-height: 110px;
+    border-color: rgba(250, 204, 21, 0.5);
+    overflow: hidden;
+}
+
+#messageBox {
+    color: #facc15;
+    font-weight: bold;
+}
+
+/* AIRPORTS */
+
+.airports-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.airports-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    padding-right: 8px;
+}
+
+.airport-card {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    transition: transform 0.2s ease, border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.airport-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(250, 204, 21, 0.7);
+    box-shadow: 0 0 18px rgba(250, 204, 21, 0.18);
+}
+
+.airport-card h3 {
+    color: #facc15;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+}
+
+.airport-card p {
+    margin: 3px 0;
+}
+
+.travel-btn {
+    margin-top: 6px;
+}
+
+/* SCROLLBAR */
+
+.airports-grid::-webkit-scrollbar {
+    width: 10px;
+}
+
+.airports-grid::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 10px;
+}
+
+.airports-grid::-webkit-scrollbar-thumb {
+    background: #facc15;
+    border-radius: 10px;
+}
+
+.airports-grid::-webkit-scrollbar-thumb:hover {
+    background: #fde047;
+}
+
+/* FLIGHT ANIMATION */
+
+.flight-animation {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid #facc15;
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.plane {
+    font-size: 3rem;
+    animation: flyAcross 1.8s ease-in-out infinite;
+}
+
+@keyframes flyAcross {
+    0% {
+        transform: translateX(-45vw) rotate(5deg);
+    }
+    50% {
+        transform: translateX(0) rotate(-5deg);
+    }
+    100% {
+        transform: translateX(45vw) rotate(5deg);
+    }
+}
+
+#flightText {
+    color: #facc15;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+    #gameScreen {
+        height: auto;
+        overflow: auto;
+    }
+
+    .game-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .airports-grid {
+        max-height: 500px;
+    }
+
+    .welcome-card h1 {
+        font-size: 2.8rem;
+    }
+}
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glitch in Transit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="welcomeScreen" class="screen welcome-screen">
+    <div class="welcome-card">
+        <p class="system-label">SYSTEM ACCESS DETECTED</p>
+
+        <h1>Glitch in Transit</h1>
+
+        <p class="welcome-story">
+            You found a strange 12-sided dice. After rolling it, a portal pulled you into a frozen pocket universe.
+            You wake up in an airport with stolen cash beside you. The police are coming.
+        </p>
+
+        <p class="welcome-goal">
+            Travel between airports, collect enough points, unlock continents, and find the portal home before you are caught.
+        </p>
+
+        <div class="name-box">
+            <label for="screenName">Traveler Name</label>
+            <input type="text" id="screenName" placeholder="Enter your name">
+        </div>
+
+        <div class="welcome-buttons">
+            <button onclick="startNewGame()">Start Escape</button>
+            <button class="secondary-btn" onclick="loadGameFromWelcome()">Load Game</button>
+        </div>
+    </div>
+</div>
+
+    <div id="gameScreen" class="screen hidden">
+        <header class="top-bar">
+            <h1>Glitch in Transit</h1>
+            <button onclick="goToWelcome()">Back to Menu</button>
+        </header>
+
+        <div id="flightAnimation" class="flight-animation hidden">
+            <div class="plane">✈️</div>
+            <p id="flightText">Preparing flight...</p>
+        </div>
+
+        <div class="game-layout">
+            <div class="left-column">
+
+                <section class="panel rules-panel">
+                    <h2>Mission</h2>
+                    <p>Reach 220 points, unlock all continents, and return to your starting airport.</p>
+                    <p>Europe is unlocked at the start. North America unlocks at 80 points. Asia unlocks at 160 points.</p>
+                </section>
+
+                <section class="panel state-panel">
+                    <h2>Player Status</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><span>Player</span><strong id="playerName">-</strong></div>
+                        <div class="stat-card"><span>Location</span><strong id="location">-</strong></div>
+                        <div class="stat-card"><span>Fuel</span><strong id="fuel">-</strong></div>
+                        <div class="stat-card"><span>Gold</span><strong id="gold">-</strong></div>
+                        <div class="stat-card"><span>Points</span><strong id="points">-</strong></div>
+                        <div class="stat-card"><span>Status</span><strong id="status">-</strong></div>
+                        <div class="stat-card wide"><span>Unlocked</span><strong id="unlocked">-</strong></div>
+                    </div>
+                </section>
+
+                <section class="panel actions-panel">
+                    <h2>Actions</h2>
+                    <div class="action-buttons">
+                        <button onclick="buyFuel()">Refuel in Secret</button>
+                        <button onclick="resetGame()">Restart Escape</button>
+                        <button onclick="loadAirports()">Refresh Airports</button>
+                    </div>
+                </section>
+
+                <section class="panel message-panel">
+                    <h2>System Message</h2>
+                    <p id="messageBox">Welcome, traveler.</p>
+                </section>
+
+            </div>
+
+            <div class="right-column">
+                <section class="panel airports-panel">
+                    <h2>Available Airports</h2>
+                    <div id="airportsList" class="airports-grid"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
