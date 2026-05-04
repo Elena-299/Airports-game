@@ -181,6 +181,7 @@ button:hover,
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: auto;
 }
 
 .right-column {
@@ -341,7 +342,7 @@ button:hover,
     left: 50%;
     transform: translateX(-50%);
     width: 60%;
-    z-index: 10;
+    z-index: 1000;
     background: rgba(15, 23, 42, 0.95);
     border: 2px solid #facc15;
     border-radius: 16px;

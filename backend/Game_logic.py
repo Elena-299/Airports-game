@@ -85,20 +85,20 @@ def create_new_game(cursor, conn, screen_name):
 
 def get_game_state(cursor, screen_name):
     cursor.execute("""
-        SELECT screen_name, location_icao, gold, fuel,
-               base_points, status, unlocked_continents
-        FROM game
-        WHERE screen_name = %s
+        SELECT g.screen_name, g.location_icao, g.gold, g.fuel,
+               g.base_points, g.status, g.unlocked_continents,
+               a.name, c.name
+        FROM game g
+        JOIN airport a ON a.icao_code = g.location_icao
+        JOIN country c ON c.country_code = a.country_code
+        WHERE g.screen_name = %s
     """, (screen_name,))
-
     row = cursor.fetchone()
-
     if not row:
         return {
             "success": False,
             "error": "Game not found"
         }
-
     return {
         "success": True,
         "screen_name": row[0],
@@ -107,7 +107,9 @@ def get_game_state(cursor, screen_name):
         "fuel": row[3],
         "base_points": row[4],
         "status": row[5],
-        "unlocked_continents": row[6]
+        "unlocked_continents": row[6],
+        "location_airport_name": row[7],
+        "location_country_name": row[8]
     }
 
 def parse_unlocked(value: str):
@@ -284,6 +286,7 @@ def list_airports_for_player(cursor, screen_name):
 
     return {
         "success": True,
+        "current_location": progress["location_icao"],
         "airports": airports
     }
 

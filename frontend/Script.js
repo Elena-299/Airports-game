@@ -24,7 +24,9 @@ function updateState(state) {
     if (!state) return;
 
     document.getElementById("playerName").textContent = state.screen_name || "-";
-    document.getElementById("location").textContent = state.location_icao || "-";
+    document.getElementById("location").textContent = state.location_airport_name
+    ? `${state.location_airport_name} (${state.location_icao})`
+    : state.location_icao || "-";
     document.getElementById("fuel").textContent = state.fuel ?? "-";
     document.getElementById("gold").textContent = state.gold ?? "-";
     document.getElementById("points").textContent = state.base_points ?? "-";
@@ -205,9 +207,18 @@ const AIRPORT_COORDS = {
 };
 
 let markers = [];
+let map;
 async function loadAirports() {
     const screenName = getScreenName();
-    let map;
+
+    const redIcon = L.icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
 
     try {
         const response = await fetch(`${BASE_URL}/airports/${screenName}`);
@@ -219,10 +230,11 @@ async function loadAirports() {
         }
 
         if (!map) {
-            map = L.map("airportsMap").setView([20, 0], 2);
+            map = L.map("airportsMap", {zoomControl: false}).setView([20, 0], 2);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: "© OpenStreetMap contributors"
             }).addTo(map);
+            L.control.zoom({position: "bottomright"}).addTo(map);
         }
 
         markers.forEach(m => m.remove());
@@ -232,7 +244,8 @@ async function loadAirports() {
             const coords = AIRPORT_COORDS[airport.icao_code];
             if (!coords) return;
 
-            const marker = L.marker(coords).addTo(map);
+            const isCurrentLocation = airport.icao_code === data.current_location;
+            const marker = L.marker(coords, isCurrentLocation ? { icon: redIcon } : {}).addTo(map);
             markers.push(marker)
 
             marker.bindPopup(`
@@ -270,26 +283,36 @@ async function travelToAirport(toIcao) {
 
         const data = await response.json();
 
-        if (data.success) {
-            setTimeout(async () => {
-                showFlightAnimation(`Arrived at ${toIcao}!`);
-
-                showMessage(data.message + (data.extra_message ? " " + data.extra_message : ""));
-
-                if (data.state && data.state.success) {
-                    updateState(data.state);
-                }
-
+    if (data.success) {
+        setTimeout(async () => {
+            showFlightAnimation(`Arrived at ${toIcao}!`);
+            if (data.win) {
+                showMessage("YOU WON! You escaped the pocket universe and went back home!");
+                updateState(data.state);
                 await loadAirports();
-            }, 1200);
-        } else {
-            showMessage(data.error || "Travel failed.");
-        }
-    } catch (error) {
-        showMessage("Error during travel.");
-        console.error(error);
+                return;
+            }
+            if (data.game_over) {
+                showMessage("GAME OVER. " + (data.extra_message || ""));
+                updateState(data.state);
+                await loadAirports();
+                return;
+            }
+
+            showMessage(data.message + (data.extra_message ? " " + data.extra_message : ""));
+
+            if (data.state && data.state.success) {
+                updateState(data.state);
+            }
+
+            await loadAirports();
+        }, 1200);
     }
-}
+        } catch (error) {
+            showMessage("Error during travel.");
+            console.error(error);
+        }
+    }
 
 async function buyFuel() {
     const screenName = getScreenName();

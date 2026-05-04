@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="28.4.2026.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/App.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Database.py" afterDir="false" />
+    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="4.5.2026.">
       <change beforePath="$PROJECT_DIR$/backend/Game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Game_logic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/Index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/Script.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Style.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777377633264</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="4.5.2026.">
+      <option name="closed" value="true" />
+      <created>1777911725924</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1777911725924</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -228,7 +234,8 @@
     <MESSAGE value="10" />
     <MESSAGE value="11" />
     <MESSAGE value="28.4.2026." />
-    <option name="LAST_COMMIT_MESSAGE" value="28.4.2026." />
+    <MESSAGE value="4.5.2026." />
+    <option name="LAST_COMMIT_MESSAGE" value="4.5.2026." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/gameproject$practice_game.coverage" NAME="practice game Coverage Results" MODIFIED="1772523488468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
