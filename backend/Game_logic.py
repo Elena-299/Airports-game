@@ -1,9 +1,7 @@
 import random
 
-
 def dice_roll():
     dice = random.randint(1, 12)
-
     if dice == 1:
         return "EFHK"
     elif dice == 2:
@@ -337,7 +335,7 @@ def buy_fuel(cur, conn, screen_name: str):
     if gold < cost:
         return {
             "success": False,
-            "error": f"Not enough gold. Need {cost}, you have {gold}."
+            "error": f"Not enough gold. You need {cost}, but you have {gold}."
         }
 
     cur.execute("""

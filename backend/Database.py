@@ -6,8 +6,8 @@ class Database:
         self.config ={
             "host": "localhost",
             "user": "root",
-            "password":"metropolia12",
-            "database":"Glitch in Transit"
+            "password":"Python",
+            "database":"glitch_in_transit"
         }
     def connect(self):
         return mysql.connector.connect(**self.config)

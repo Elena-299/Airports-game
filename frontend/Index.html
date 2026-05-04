@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glitch in Transit</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 <div id="welcomeScreen" class="screen welcome-screen">
@@ -28,8 +30,8 @@
         </div>
 
         <div class="welcome-buttons">
-            <button onclick="startNewGame()">Start Escape</button>
-            <button class="secondary-btn" onclick="loadGameFromWelcome()">Load Game</button>
+            <button onclick="startNewGame()">Start New Escape</button>
+            <button class="secondary-btn" onclick="loadGameFromWelcome()">Resume Previous Game</button>
         </div>
     </div>
 </div>
@@ -51,7 +53,7 @@
                 <section class="panel rules-panel">
                     <h2>Mission</h2>
                     <p>Reach 220 points, unlock all continents, and return to your starting airport.</p>
-                    <p>Europe is unlocked at the start. North America unlocks at 80 points. Asia unlocks at 160 points.</p>
+                    <p>Europe is currently unlocked. North America unlocks at 80 points. Asia unlocks at 160 points.</p>
                 </section>
 
                 <section class="panel state-panel">
@@ -70,7 +72,7 @@
                 <section class="panel actions-panel">
                     <h2>Actions</h2>
                     <div class="action-buttons">
-                        <button onclick="buyFuel()">Refuel in Secret</button>
+                        <button onclick="buyFuel()">Buy More Fuel</button>
                         <button onclick="resetGame()">Restart Escape</button>
                         <button onclick="loadAirports()">Refresh Airports</button>
                     </div>
@@ -86,12 +88,12 @@
             <div class="right-column">
                 <section class="panel airports-panel">
                     <h2>Available Airports</h2>
-                    <div id="airportsList" class="airports-grid"></div>
+                    <div id="airportsMap" style="height: 500px;"></div>
                 </section>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="Script.js"></script>
 </body>
 </html>

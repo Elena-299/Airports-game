@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from database import Database
-from game_logic import create_new_game, get_game_state, list_airports_for_player, travel, buy_fuel, reset_game
+from Database import Database
+from Game_logic import create_new_game, get_game_state, list_airports_for_player, travel, buy_fuel, reset_game
 
 app = Flask(__name__)
 CORS(app)

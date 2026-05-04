@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="11">
-      <change afterPath="$PROJECT_DIR$/backend/App.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Game_logic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glitch in transit.py" beforeDir="false" afterPath="$PROJECT_DIR$/software 1/Old version.py" afterDir="false" />
+    <list default="true" id="347c2108-faa1-447f-b291-fcb6eb9df7bb" name="Changes" comment="28.4.2026.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/App.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Game_logic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Script.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Script.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,12 +34,12 @@
     &quot;assignee&quot;: &quot;katherm2002&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Elena-299/Airports-game.git",
-    "accountId": "5a271f0c-132a-4c20-9613-0779e1049496"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Elena-299/Airports-game.git&quot;,
+    &quot;accountId&quot;: &quot;5a271f0c-132a-4c20-9613-0779e1049496&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -56,6 +55,8 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.App.executor": "Run",
+    "Python.Game_logic.executor": "Run",
     "Python.fun.executor": "Run",
     "Python.glitch in transit.executor": "Run",
     "Python.practice game.executor": "Run",
@@ -200,7 +201,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773053669135</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="28.4.2026.">
+      <option name="closed" value="true" />
+      <created>1777377633264</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1777377633264</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,7 +227,8 @@
     <MESSAGE value="9" />
     <MESSAGE value="10" />
     <MESSAGE value="11" />
-    <option name="LAST_COMMIT_MESSAGE" value="11" />
+    <MESSAGE value="28.4.2026." />
+    <option name="LAST_COMMIT_MESSAGE" value="28.4.2026." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/gameproject$practice_game.coverage" NAME="practice game Coverage Results" MODIFIED="1772523488468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
