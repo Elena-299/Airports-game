@@ -30,7 +30,7 @@ def dice_roll():
 MAX_FUEL = 120
 START_GOLD = 0
 START_FUEL = MAX_FUEL
-FUEL_QUARTER = MAX_FUEL // 4  # 30
+FUEL_QUARTER = MAX_FUEL // 4
 MAX_PURCHASES_PER_COUNTRY = 4
 
 SAME_COUNTRY_FUEL_COST = {
@@ -87,7 +87,7 @@ def get_game_state(cursor, screen_name):
     cursor.execute("""
         SELECT g.screen_name, g.location_icao, g.gold, g.fuel,
                g.base_points, g.status, g.unlocked_continents,
-               a.name, c.name
+               a.name, c.name, g.start_icao
         FROM game g
         JOIN airport a ON a.icao_code = g.location_icao
         JOIN country c ON c.country_code = a.country_code
@@ -109,7 +109,8 @@ def get_game_state(cursor, screen_name):
         "status": row[5],
         "unlocked_continents": row[6],
         "location_airport_name": row[7],
-        "location_country_name": row[8]
+        "location_country_name": row[8],
+        "start_icao": row[9]
     }
 
 def parse_unlocked(value: str):
@@ -129,6 +130,7 @@ def get_player_progress(cur, screen_name: str):
     row = cur.fetchone()
     if not row:
         return None
+    
     location_icao, fuel, gold, base_points, unlocked_str = row
     return {
         "location_icao": location_icao,

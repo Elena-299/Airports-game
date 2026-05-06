@@ -11,17 +11,12 @@
 <body>
 <div id="welcomeScreen" class="screen welcome-screen">
     <div class="welcome-card">
-        <p class="system-label">SYSTEM ACCESS DETECTED</p>
+        <p class="system-label">SYSTEM ACCESS GRANTED</p>
 
         <h1>Glitch in Transit</h1>
 
-        <p class="welcome-story">
-            You found a strange 12-sided dice. After rolling it, a portal pulled you into a frozen pocket universe.
-            You wake up in an airport with stolen cash beside you. The police are coming.
-        </p>
-
         <p class="welcome-goal">
-            Travel between airports, collect enough points, unlock continents, and find the portal home before you are caught.
+            Travel between airports to find the portal home, but be careful, because the police are coming!
         </p>
 
         <div class="name-box">
@@ -59,13 +54,13 @@
                 <section class="panel state-panel">
                     <h2>Player Status</h2>
                     <div class="stats-grid">
+                        <div class="stat-card wide"><span>Location</span><strong id="location">-</strong></div>
                         <div class="stat-card"><span>Player</span><strong id="playerName">-</strong></div>
-                        <div class="stat-card"><span>Location</span><strong id="location">-</strong></div>
                         <div class="stat-card"><span>Fuel</span><strong id="fuel">-</strong></div>
                         <div class="stat-card"><span>Gold</span><strong id="gold">-</strong></div>
                         <div class="stat-card"><span>Points</span><strong id="points">-</strong></div>
-                        <div class="stat-card"><span>Status</span><strong id="status">-</strong></div>
-                        <div class="stat-card wide"><span>Unlocked</span><strong id="unlocked">-</strong></div>
+                        <div class="stat-card"><span>Unlocked</span><strong id="unlocked">-</strong></div>
+                        <div class="stat-card"><span>Return To</span><strong id="returnTo">-</strong></div>
                     </div>
                 </section>
 
@@ -77,22 +72,23 @@
                     </div>
                 </section>
 
-                <section class="panel message-panel">
-                    <h2>System Message</h2>
-                    <p id="messageBox">Welcome, traveler.</p>
-                </section>
-
             </div>
 
             <div class="right-column">
                 <section class="panel airports-panel">
                     <h2>Available Airports</h2>
-                    <div id="airportsList" class="airports-grid"></div>
+                    <div id="airportsMap" class="airports-grid"></div>
                 </section>
             </div>
         </div>
     </div>
 
+    <div id="messageModal" class="message-modal hidden">
+        <div class="message-modal-card">
+            <p id="messageModalText"></p>
+            <button onclick="closeMessage()">OK</button>
+        </div>
+    </div>
     <script src="Script.js"></script>
 </body>
 </html>

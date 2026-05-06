@@ -66,7 +66,7 @@ body {
     font-size: 1.1rem;
     color: #facc15;
     font-weight: bold;
-    max-width: 700px;
+    max-width: 400px;
     margin: 0 auto 30px auto;
 }
 
@@ -182,6 +182,15 @@ button:hover,
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
+    direction: rtl;
+}
+
+.left-column > * {
+    direction: ltr;
+}
+
+.left-column::-webkit-scrollbar {
+    width: 0px;
 }
 
 .right-column {
@@ -254,16 +263,33 @@ button:hover,
     font-size: 0.9rem;
 }
 
-.message-panel {
-    flex: 0 0 110px;
-    min-height: 110px;
-    border-color: rgba(250, 204, 21, 0.5);
-    overflow: hidden;
+.message-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#messageBox {
+.message-modal-card {
+    background: rgba(15, 23, 42, 0.98);
+    border: 2px solid #facc15;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 0 35px rgba(250, 204, 21, 0.25);
+}
+
+.message-modal-card p {
     color: #facc15;
+    font-size: 1.1rem;
     font-weight: bold;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
 }
 
 /* AIRPORTS */
